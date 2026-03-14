@@ -56,7 +56,11 @@
                             <form th:action="@{/branches/save}" method="post">
                                 <div class="form-group">
                                     <label for="Branchname">Branch Name</label>
-                                    <input type="text" name="name" placeholder="Branch Name" id="Branchname">
+                                    <input type="text" name="name" placeholder="Branch Name" id="Branchname" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="branchCode">Branch Code</label>
+                                    <input type="text" name="branchCode" placeholder="Branch Code" id="branchCode" required>
                                 </div>
 
                                 <button type="submit" class="btn btn-default">Save</button>
@@ -84,7 +88,7 @@
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Code</th>
                                     <th>Name</th>
                                     <th>Created</th>
                                     <th>Status</th>
@@ -92,7 +96,7 @@
                                 </thead>
                                 <tbody>
                                 <tr th:each="branch : ${branches}">
-                                    <td th:text="${branch.id}"></td>
+                                    <td th:text="${branch.branchCode}"></td>
                                     <td class="center" th:text="${branch.name}"></td>
                                     <td class="center" th:text="${#temporals.format(branch.createdAt, 'dd MMM yyyy, hh:mm a')}"></td>
                                     <td class="center">

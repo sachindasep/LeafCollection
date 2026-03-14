@@ -33,9 +33,9 @@ public class PartyController {
 
     @PostMapping("/save")
     public String saveParty(@ModelAttribute Party party,
-                            @RequestParam Long branchId) {
+                            @RequestParam String branchCode) {
 
-        partyService.createParty(party, branchId);
+        partyService.createParty(party, branchCode);
         return "redirect:/parties";
     }
 

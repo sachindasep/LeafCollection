@@ -23,6 +23,9 @@ public class Branch {
 
     private String name;
 
+    @Column(unique = true, nullable = false)
+    private String branchCode;
+
     private Boolean active = true;
 
     @Column(name = "created_at")

@@ -35,6 +35,9 @@ public class Party {
 
     private LocalDateTime createdAt;
 
+    @Column(unique = true, nullable = false)
+    private String partyCode;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id")
     private Branch branch;

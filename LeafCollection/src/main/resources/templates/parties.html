@@ -65,12 +65,12 @@
                                     <input type="text" name="address" placeholder="Enter Address" id="address">
                             </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="branchId">Select Branch</label>
+                                        <label class="control-label" for="branchCode">Select Branch</label>
 
                                         <div class="controls">
-                                            <select id="branchId" name="branchId" data-rel="chosen">
+                                            <select id="branchCode" name="branchCode" data-rel="chosen">
                                                 <option th:each="b : ${branches}"
-                                                        th:value="${b.id}"
+                                                        th:value="${b.branchCode}"
                                                         th:text="${b.name}">
                                                 </option>
                                             </select>
