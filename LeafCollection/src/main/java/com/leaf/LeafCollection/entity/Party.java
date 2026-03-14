@@ -4,18 +4,16 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
+@Table(name = "parties")
 @Data
-@AllArgsConstructor
-@Table(name = "branch")
 @NoArgsConstructor
-public class Branch {
+@AllArgsConstructor
+public class Party {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +21,22 @@ public class Branch {
 
     private String name;
 
+    private String phone;
+
+    private String address;
+
+    private String upi;
+
+    private String accountNumber;
+
+    private String ifsc;
+
     private Boolean active = true;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
-    private List<Party> parties = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
 
 }

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS branch (
+/*CREATE TABLE IF NOT EXISTS branch (
                         id BIGINT AUTO_INCREMENT PRIMARY KEY,
                         name VARCHAR(100) NOT NULL,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -58,4 +58,4 @@ CREATE TABLE IF NOT EXISTS monthly_bill (
                               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                               CONSTRAINT unique_party_month UNIQUE(party_id, bill_month, bill_year),
                               FOREIGN KEY (party_id) REFERENCES party(id)
-);
+);*/
