@@ -14,12 +14,6 @@ import java.util.Optional;
 public interface PartyRepository extends JpaRepository<Party, Long> {
 
     List<Party> findByBranchId(Long branchId);
-/*    @Query("""
-           SELECT p.partyCode
-           FROM Party p
-           WHERE p.partyCode LIKE CONCAT(:branchCode, '%')
-           ORDER BY p.partyCode DESC
-           """)
-    Optional<String> findLastCodeByBranch(@Param("branchCode")Long branchCode, Pageable pageable);
- */   Optional<Party> findTopByPartyCodeStartingWithOrderByIdDesc(String branchCode);
+
+    Optional<Party> findTopByPartyCodeStartingWithOrderByIdDesc(String branchCode);
 }

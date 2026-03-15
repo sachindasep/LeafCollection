@@ -5,12 +5,12 @@
 </head>
 
 <body>
-    <!-- topbar starts -->
-    <div th:replace="fragments/topbar :: topbar"></div>
-    <!-- topbar ends -->
+<!-- topbar starts -->
+<div th:replace="fragments/topbar :: topbar"></div>
+<!-- topbar ends -->
 <div class="ch-container">
     <div class="row">
-        
+
         <!-- left menu starts -->
         <div th:replace="fragments/sidebar :: sidebar"></div>
         <!-- left menu ends -->
@@ -27,15 +27,15 @@
         <div id="content" class="col-lg-10 col-sm-10">
             <!-- content starts -->
             <div>
-    <ul class="breadcrumb">
-        <li>
-            <a href="#">Home</a>
-        </li>
-        <li>
-            <a href="#">Party</a>
-        </li>
-    </ul>
-</div>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="#">Home</a>
+                    </li>
+                    <li>
+                        <a href="#">Party</a>
+                    </li>
+                </ul>
+            </div>
             <div class="row">
                 <div class="box col-md-12">
                     <div class="box-inner">
@@ -43,12 +43,6 @@
                             <h2><i class="glyphicon glyphicon-edit"></i> Add New Party</h2>
 
                             <div class="box-icon">
-                                <a href="#" class="btn btn-setting btn-round btn-default"><i
-                                        class="glyphicon glyphicon-cog"></i></a>
-                                <a href="#" class="btn btn-minimize btn-round btn-default"><i
-                                        class="glyphicon glyphicon-chevron-up"></i></a>
-                                <a href="#" class="btn btn-close btn-round btn-default"><i
-                                        class="glyphicon glyphicon-remove"></i></a>
                             </div>
                         </div>
                         <div class="box-content">
@@ -58,101 +52,116 @@
                                     <input type="text" name="name" placeholder="Enter Name" id="name" required>
                                 </div>
                                 <div class="form-group">
-                                <label for="phone">Mobile Number</label>
+                                    <label for="phone">Mobile Number</label>
                                     <input type="text" name="phone" placeholder="Enter Mobile Number" id="phone">
-                                </div><div class="form-group">
-                            <label for="address">Address</label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Address</label>
                                     <input type="text" name="address" placeholder="Enter Address" id="address">
-                            </div>
-                                    <div class="control-group">
-                                        <label class="control-label" for="branchCode">Select Branch</label>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="branchCode">Select Branch</label>
 
-                                        <div class="controls">
-                                            <select id="branchCode" name="branchCode" data-rel="chosen">
-                                                <option th:each="b : ${branches}"
-                                                        th:value="${b.branchCode}"
-                                                        th:text="${b.name}">
-                                                </option>
-                                            </select>
-                                        </div>
+                                    <div class="controls">
+                                        <select id="branchCode" name="branchCode" data-rel="chosen">
+                                            <option th:each="b : ${branches}"
+                                                    th:value="${b.branchCode}"
+                                                    th:text="${b.name}">
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
-
-                                <button type="submit" class="btn btn-default">Save</button>
-                            </form>
-
                         </div>
+
+                        <button type="submit" class="btn btn-default">Save</button>
+                        </form>
+
                     </div>
                 </div>
-                <!--/span-->
-                <div class="box col-md-6">
-                    <div class="box-inner">
-                        <div class="box-header well" data-original-title="">
-                            <h2>Branch List</h2>
+            </div>
+            <!--/span-->
+            <div class="box col-md-12">
+                <div class="box-inner">
+                    <div class="box-header well" data-original-title="">
+                        <h2><i class="glyphicon glyphicon-user"></i> Party List</h2>
 
-                            <div class="box-icon">
-                                <a href="#" class="btn btn-setting btn-round btn-default"><i
-                                        class="glyphicon glyphicon-cog"></i></a>
-                                <a href="#" class="btn btn-minimize btn-round btn-default"><i
-                                        class="glyphicon glyphicon-chevron-up"></i></a>
-                                <a href="#" class="btn btn-close btn-round btn-default"><i
-                                        class="glyphicon glyphicon-remove"></i></a>
-                            </div>
-                        </div>
-                        <div class="box-content">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Created</th>
-                                    <th>Status</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="branch : ${branches}">
-                                    <td th:text="${branch.id}"></td>
-                                    <td class="center" th:text="${branch.name}"></td>
-                                    <td class="center" th:text="${#temporals.format(branch.createdAt, 'dd MMM yyyy, hh:mm a')}"></td>
-                                    <td class="center">
-                                        <span class="label-success label label-default">Active</span>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div class="box-icon">
+                            <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                                    class="glyphicon glyphicon-chevron-up"></i></a>
                         </div>
                     </div>
-                </div>
-            </div><!--/row-->
-            </form>
-    <hr>
+                    <div class="box-content">
+                        <table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
+                            <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Branch</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="party : ${parties}">
+                                <td th:text="${party.partyCode}"></td>
+                                <td th:text="${party.name}"></td>
+                                <td class="center" th:text="${party.branch.name}"></td>
+                                <td class="center">
+                                    <span th:class="${party.active} ? 'label-success label label-default' : 'label-danger label label-default'"
+                                          th:text="${party.active} ? 'Active' : 'Deactive'"></span>
+                                </td>
+                                <td class="center">
+                                    <a href="#" class="btn btn-info btn-setting">Edit ,View ,Delete</a>
+                                    <!--<a class="btn btn-success" href="#">
+                                        <i class="glyphicon glyphicon-zoom-in icon-white"></i>
+                                        View
+                                    </a>
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
+                                    <a class="btn btn-info" href="#">
+                                        <i class="glyphicon glyphicon-edit icon-white"></i>
+                                        Edit
+                                    </a>
+                                    <a class="btn btn-danger" href="#">
+                                        <i class="glyphicon glyphicon-trash icon-white"></i>
+                                        Delete
+                                    </a>-->
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div><!--/row-->
+        </form>
+        <hr>
 
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3>Settings</h3>
-                </div>
-                <div class="modal-body">
-                    <p>Here settings can be configured...</p>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
-                    <a href="#" class="btn btn-primary" data-dismiss="modal">Save changes</a>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <h3>Next release Feature</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Stay Tuned Will be available in next release</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+                        <a href="#" class="btn btn-primary" data-dismiss="modal">Save changes</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div th:replace="fragments/footer :: footer"></div>
+        <div th:replace="fragments/footer :: footer"></div>
 
-</div><!--/.fluid-container-->
+    </div><!--/.fluid-container-->
 
-<!-- external javascript -->
-        <div th:replace="fragments/scripts :: scripts"></div>
+    <!-- external javascript -->
+    <div th:replace="fragments/scripts :: scripts"></div>
 
 </body>
 </html>

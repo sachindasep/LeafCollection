@@ -26,6 +26,7 @@ public class PartyController {
 
     @GetMapping
     public String partyPage(Model model) {
+        model.addAttribute("parties", partyService.getAllParties());
         model.addAttribute("party", new Party());
         model.addAttribute("branches", branchRepository.findAll());
         return "parties";
