@@ -42,4 +42,13 @@ public class Party {
     @JoinColumn(name = "branch_id")
     private Branch branch;
 
+    @Override
+    public String toString() {
+        return "Party{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", partyCode='" + partyCode + '\'' +
+                ", active=" + active +
+                '}';
+    }
 }

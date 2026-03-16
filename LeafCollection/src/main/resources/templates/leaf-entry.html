@@ -1,37 +1,167 @@
-<div class="container">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header :: header"></div>
+</head>
 
-    <h3>Leaf Entry</h3>
+<body>
+<!-- topbar starts -->
+<div th:replace="fragments/topbar :: topbar"></div>
+<!-- topbar ends -->
+<div class="ch-container">
+    <div class="row">
 
-    <form th:action="@{/leaf-entry/save}" th:object="${leafEntry}" method="post">
+        <!-- left menu starts -->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <!-- left menu ends -->
 
-        <div class="form-group">
-            <label>Entry Date</label>
-            <input type="date" th:field="*{entryDate}" class="form-control" required>
+        <noscript>
+            <div class="alert alert-block col-md-12">
+                <h4 class="alert-heading">Warning!</h4>
+
+                <p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a>
+                    enabled to use this site.</p>
+            </div>
+        </noscript>
+
+        <div id="content" class="col-lg-10 col-sm-10">
+            <!-- content starts -->
+            <div>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="#">Home</a>
+                    </li>
+                    <li>
+                        <a href="#">Leaf Entry</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="box col-md-12">
+                    <div class="box-inner">
+                        <div class="box-header well" data-original-title="">
+                            <h2><i class="glyphicon glyphicon-edit"></i> Leaf Collection</h2>
+
+                            <div class="box-icon">
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <form th:action="@{/leaf-entry/save}" th:object="${leafEntry}" method="post">
+                                <input type="hidden" th:field="*{id}" />
+                                <div class="form-group">
+                                    <label for="entryDate">Entry Date</label>
+                                    <input type="date" th:field="*{entryDate}" name="entryDate" placeholder="Enter Date"
+                                           id="entryDate" required>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="party">Select Party</label>
+
+                                    <div class="controls">
+                                        <select id="party" name="party" data-rel="chosen" th:field="*{party}">
+                                            <option value="">-- Select Party --</option>
+                                            <option th:each="p : ${parties}"
+                                                    th:value="${p.id}"
+                                                    th:text="${p.partyCode + ' - ' + p.name}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="quantity">Quantity (Kg)</label>
+                                        <input type="number" step="0.01" name="quantity" th:field="*{quantity}" placeholder="Enter Weight"
+                                               id="quantity">
+                                    </div>
+                                </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-default" th:text="${isEditMode ? 'Update' : 'Save'}"></button>
+                        <a th:if="${isEditMode}" href="/leaf-entry" class="btn btn-secondary">Cancel</a>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <!--/span-->
+            <div class="row">
+            <div class="box col-md-12">
+                <div class="box-inner">
+                    <div class="box-header well" data-original-title="">
+                        <h2><i class="glyphicon glyphicon-user"></i> Today Collection</h2>
+
+                        <div class="box-icon">
+                            <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                                    class="glyphicon glyphicon-chevron-up"></i></a>
+                        </div>
+                    </div>
+                    <div class="box-content">
+                          <div class="alert alert-info">
+                                <strong>Today's Total Collection: </strong>
+                                <span th:text="${todaysTotalWeight != null ? todaysTotalWeight + ' KG' : '0.00 KG'}"></span>
+                            </div>
+                        <table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
+                            <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Branch</th>
+                                <th>Weight (KG)</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="today : ${todaysList}">
+                                <td th:text="${today.partyCode}"></td>
+                                <td th:text="${today.partyName}"></td>
+                                <td th:text="${today.branchName}"></td>
+                                <td class="center" th:text="${today.weight}"></td>
+                                <td class="center">
+
+                                    <a class="btn btn-info" th:href="@{'/leaf-entry/edit/' + ${today.id}}">
+                                        <i class="glyphicon glyphicon-edit icon-white"></i>
+                                        Edit
+                                    </a>
+                                    <a class="btn btn-danger" th:href="@{'/leaf-entry/delete/' + ${today.id}}"
+                                       onclick="return confirm('Are you sure you want to delete this leaf entry?')">
+                                        <i class="glyphicon glyphicon-trash icon-white"></i>
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div><!--/row-->
+        </form>
+        <hr>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <h3>Next release Feature</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Stay Tuned Will be available in next release</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+                        <a href="#" class="btn btn-primary" data-dismiss="modal">Save changes</a>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Party</label>
-            <select th:field="*{party}" class="form-control">
+        <div th:replace="fragments/footer :: footer"></div>
 
-                <option th:each="p : ${parties}"
-                        th:value="${p.id}"
-                        th:text="${p.partyCode + ' - ' + p.name}">
-                </option>
+    </div><!--/.fluid-container-->
 
-            </select>
-        </div>
+    <!-- external javascript -->
+    <div th:replace="fragments/scripts :: scripts"></div>
 
-        <div class="form-group">
-            <label>Quantity (Kg)</label>
-            <input type="number" step="0.01" th:field="*{quantity}" class="form-control" required>
-        </div>
-
-        <br>
-
-        <button type="submit" class="btn btn-primary">
-            Save Entry
-        </button>
-
-    </form>
-
-</div>
+</body>
+</html>

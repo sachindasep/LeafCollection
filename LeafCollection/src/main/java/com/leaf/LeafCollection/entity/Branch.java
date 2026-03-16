@@ -34,4 +34,13 @@ public class Branch {
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     private List<Party> parties = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "Branch{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", branchCode='" + branchCode + '\'' +
+                ", active=" + active +
+                '}';
+    }
 }
