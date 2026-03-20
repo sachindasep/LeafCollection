@@ -1,6 +1,7 @@
 package com.leaf.LeafCollection.service;
 
 import com.leaf.LeafCollection.dto.LeafEntryDTO;
+import com.leaf.LeafCollection.dto.LeafReportDTO;
 import com.leaf.LeafCollection.entity.LeafEntry;
 import com.leaf.LeafCollection.repository.LeafEntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,7 @@ public class LeafEntryService {
     public LeafEntry findById(Long id){
         return leafEntryRepository.findById(id).orElseThrow(() -> new RuntimeException("LeafEntry not found"));
     }
-
+    public List<LeafReportDTO> getLeafReport(LocalDate date, String branchCode) {
+        return leafEntryRepository.getLeafReport(date, branchCode);
+    }
 }

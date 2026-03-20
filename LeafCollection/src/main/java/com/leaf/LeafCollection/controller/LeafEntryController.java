@@ -1,22 +1,21 @@
 package com.leaf.LeafCollection.controller;
 
 import com.leaf.LeafCollection.dto.LeafEntryDTO;
+import com.leaf.LeafCollection.dto.LeafReportDTO;
 import com.leaf.LeafCollection.entity.LeafEntry;
+import com.leaf.LeafCollection.repository.BranchRepository;
 import com.leaf.LeafCollection.service.LeafEntryService;
 import com.leaf.LeafCollection.service.PartyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/leaf-entry")
@@ -27,6 +26,8 @@ public class LeafEntryController {
 
     @Autowired
     private PartyService partyService;
+    @Autowired
+    private BranchRepository branchRepository;
 
     @GetMapping
     public String leafEntryPage(Model model){
@@ -69,5 +70,55 @@ public class LeafEntryController {
         model.addAttribute("todaysTotalWeight", leafEntryService.getTodaysTotalWeight());
         model.addAttribute("isEditMode", true);
         return "leaf-entry";
+    }
+   /* @GetMapping("/leaf-reports")
+    public String getLeafReport(
+            @RequestParam("entryDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(value = "branchCode", required = false) String branchCode,
+            Model model) {
+
+        List<LeafReportDTO> report = leafEntryService.getLeafReport(date, branchCode);
+
+        double total = report.stream()
+                .mapToDouble(r -> r.getQuantity().doubleValue())
+                .sum();
+
+        model.addAttribute("reports", report);
+        model.addAttribute("total", total);
+        model.addAttribute("date", date);
+        model.addAttribute("branchCode", branchCode);
+
+        return "leaf-reports";
+    }
+    @GetMapping("/leaf-reports")
+    public String getLeafReportDefault(Model model){
+        model.addAttribute("branches", branchRepository.findAll());
+        return "leaf-reports";
+    }*/
+   @GetMapping("/leaf-reports")
+    public String getLeafReport(
+            @RequestParam(value = "entryDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(value = "branchCode", required = false) String branchCode,
+            Model model) {
+
+        if (date != null) {
+            branchCode = (branchCode != null && branchCode.isBlank()) ? null : branchCode;
+            List<LeafReportDTO> report = leafEntryService.getLeafReport(date, branchCode);
+
+            BigDecimal total = report.stream()
+                    .map(LeafReportDTO::getQuantity)
+                    .filter(Objects::nonNull)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            model.addAttribute("reports", report);
+            model.addAttribute("total", total);
+        }
+
+        model.addAttribute("entryDate", date);
+        model.addAttribute("branchCode", branchCode);
+        model.addAttribute("branches", branchRepository.findAll());
+
+        return "leaf-reports";
     }
 }

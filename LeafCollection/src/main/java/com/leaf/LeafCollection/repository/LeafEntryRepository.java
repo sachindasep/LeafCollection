@@ -1,9 +1,11 @@
 package com.leaf.LeafCollection.repository;
 
 import com.leaf.LeafCollection.dto.LeafEntryDTO;
+import com.leaf.LeafCollection.dto.LeafReportDTO;
 import com.leaf.LeafCollection.entity.LeafEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -28,5 +30,25 @@ public interface LeafEntryRepository extends JpaRepository<LeafEntry, Long> {
            "WHERE le.entryDate = CURRENT_DATE " +
            "ORDER BY le.createdAt DESC")
     List<LeafEntryDTO> getTodaysLeafEntries();
-    
+    @Query("""
+                SELECT new com.leaf.LeafCollection.dto.LeafReportDTO(
+                    l.id,
+                    b.name,
+                    p.partyCode,
+                    p.name,
+                    SUM(l.quantity)
+                )
+                FROM LeafEntry l
+                JOIN l.party p
+                JOIN p.branch b
+                WHERE l.entryDate = :date
+                  AND (:branchCode IS NULL OR b.branchCode = :branchCode)
+                GROUP BY b.branchCode, p.partyCode, p.name
+                ORDER BY p.partyCode
+            """)
+    List<LeafReportDTO> getLeafReport(
+            @Param("date") LocalDate date,
+            @Param("branchCode") String branchCode
+    );
+
 }
