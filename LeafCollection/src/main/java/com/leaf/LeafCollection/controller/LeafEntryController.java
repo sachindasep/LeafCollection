@@ -71,30 +71,7 @@ public class LeafEntryController {
         model.addAttribute("isEditMode", true);
         return "leaf-entry";
     }
-   /* @GetMapping("/leaf-reports")
-    public String getLeafReport(
-            @RequestParam("entryDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam(value = "branchCode", required = false) String branchCode,
-            Model model) {
 
-        List<LeafReportDTO> report = leafEntryService.getLeafReport(date, branchCode);
-
-        double total = report.stream()
-                .mapToDouble(r -> r.getQuantity().doubleValue())
-                .sum();
-
-        model.addAttribute("reports", report);
-        model.addAttribute("total", total);
-        model.addAttribute("date", date);
-        model.addAttribute("branchCode", branchCode);
-
-        return "leaf-reports";
-    }
-    @GetMapping("/leaf-reports")
-    public String getLeafReportDefault(Model model){
-        model.addAttribute("branches", branchRepository.findAll());
-        return "leaf-reports";
-    }*/
    @GetMapping("/leaf-reports")
     public String getLeafReport(
             @RequestParam(value = "entryDate", required = false)

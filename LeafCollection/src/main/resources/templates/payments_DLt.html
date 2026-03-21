@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment Entry</title>
+</head>
+<body>
+
+<h2>Enter Advance Payment</h2>
+
+<form th:action="@{/payments/save}" method="post">
+
+    <label>Branch:</label>
+    <select name="branchId" required>
+        <option th:each="b : ${branches}"
+                th:value="${b.id}"
+                th:text="${b.name}">
+        </option>
+    </select>
+
+    <br/>
+
+    <label>Party:</label>
+    <select name="partyId" required>
+        <option th:each="p : ${parties}"
+                th:value="${p.id}"
+                th:text="${p.name}">
+        </option>
+    </select>
+
+    <br/>
+
+    <label>Date:</label>
+    <input type="date" name="paymentDate" required/>
+
+    <br/>
+
+    <label>Amount:</label>
+    <input type="number" step="0.01" name="amount" required/>
+
+    <br/>
+
+    <label>Mode:</label>
+    <select name="paymentMode">
+        <option value="CASH">Cash</option>
+        <option value="UPI">UPI</option>
+        <option value="BANK_TRANSFER">Bank</option>
+    </select>
+
+    <br/>
+
+    <label>Remarks:</label>
+    <input type="text" name="remarks"/>
+
+    <br/><br/>
+
+    <button type="submit">Save Payment</button>
+
+</form>
+
+</body>
+</html>
