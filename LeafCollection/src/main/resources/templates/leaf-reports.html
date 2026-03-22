@@ -48,21 +48,29 @@
                         <div class="box-content">
                             <form th:action="@{/leaf-entry/leaf-reports}" method="get">
                                 <div class="form-group">
-                                    <label for="entryDate">Select Date</label>
-                                    <input type="date" name="entryDate" placeholder="Enter Date"
-                                           id="entryDate" required
-                                           th:value="${date != null} ? ${date} : ${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
+                                    <label for="startDate">Start Date</label>
+                                    <input type="date" name="startDate" placeholder="Enter Start Date"
+                                           id="startDate" required
+                                           th:value="${startDate != null} ? ${startDate} : ${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label for="endDate">End Date</label>
+                                    <input type="date" name="endDate" placeholder="Enter End Date"
+                                           id="endDate" required
+                                           th:value="${endDate != null} ? ${endDate} : ${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
                                     >
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label" for="branchCode">Select Branch</label>
+                                    <label class="control-label" for="branchCode">Select Branch (Optional)</label>
 
                                     <div class="controls">
                                         <select id="branchCode" name="branchCode" data-rel="chosen">
                                             <option value="">-- Select Branch --</option>
                                             <option th:each="b : ${branches}"
                                                     th:value="${b.branchCode}"
-                                                    th:text="${b.name}">
+                                                    th:text="${b.name}"
+                                                    th:selected="${branchCode != null && branchCode == b.branchCode}">
                                             </option>
                                         </select>
                                     </div>
@@ -82,7 +90,7 @@
                         <div class="box-header well" data-original-title="">
                             <h2><i class="glyphicon glyphicon-user"></i> Leaf Collection
                                 <span>
-    <span th:if="${entryDate != null}" th:text="'for '+ ${entryDate}"></span>
+    <span th:if="${startDate != null && endDate != null}" th:text="'from '+ ${startDate} + ' to ' + ${endDate}"></span>
     <span th:if="${branchCode != null && !#strings.isEmpty(branchCode)}"
           th:text="' - ' + ${branchCode}"></span>
 </span></h2>
@@ -100,6 +108,7 @@
                             <table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
                                 <thead>
                                 <tr>
+                                    <th>Entry Date</th>
                                     <th>Branch</th>
                                     <th>Party Code</th>
                                     <th>Party Name</th>
@@ -109,13 +118,14 @@
                                 </thead>
                                 <tbody>
                                 <tr th:each="report : ${reports}">
+                                    <td th:text="${report.entryDate}"></td>
                                     <td th:text="${report.branchName}"></td>
                                     <td th:text="${report.partyCode}"></td>
                                     <td th:text="${report.partyName}"></td>
                                     <td class="center" th:text="${report.quantity}"></td>
                                     <td class="center">
 
-                                        <a class="btn btn-info" th:href="@{'/edit/' + ${report.id}}">
+                                        <a class="btn btn-info" th:href="@{'/leaf-entry/edit/' + ${report.id}}">
                                             <i class="glyphicon glyphicon-edit icon-white"></i>
                                             Edit
                                         </a>

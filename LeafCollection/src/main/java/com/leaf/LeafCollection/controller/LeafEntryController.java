@@ -43,7 +43,10 @@ public class LeafEntryController {
 
     @PostMapping("/save")
     public String saveLeafEntry(@ModelAttribute LeafEntry leafEntry){
-
+        // Ensure entryDate is set if not provided
+        if (leafEntry.getEntryDate() == null) {
+            leafEntry.setEntryDate(LocalDate.now());
+        }
         leafEntryService.save(leafEntry);
 
         return "redirect:/leaf-entry";
@@ -74,14 +77,16 @@ public class LeafEntryController {
 
    @GetMapping("/leaf-reports")
     public String getLeafReport(
-            @RequestParam(value = "entryDate", required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(value = "startDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(value = "endDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(value = "branchCode", required = false) String branchCode,
             Model model) {
 
-        if (date != null) {
+        if (startDate != null && endDate != null) {
             branchCode = (branchCode != null && branchCode.isBlank()) ? null : branchCode;
-            List<LeafReportDTO> report = leafEntryService.getLeafReport(date, branchCode);
+            List<LeafReportDTO> report = leafEntryService.getLeafReport(startDate, endDate, branchCode);
 
             BigDecimal total = report.stream()
                     .map(LeafReportDTO::getQuantity)
@@ -92,7 +97,8 @@ public class LeafEntryController {
             model.addAttribute("total", total);
         }
 
-        model.addAttribute("entryDate", date);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
         model.addAttribute("branchCode", branchCode);
         model.addAttribute("branches", branchRepository.findAll());
 

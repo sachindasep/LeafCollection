@@ -20,7 +20,9 @@ public class SecurityConfig {
                                 "/img/**",
                                 "/bower_components/**",
                                 "/fonts/**",
-                                "/misc/**"
+                                "/misc/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

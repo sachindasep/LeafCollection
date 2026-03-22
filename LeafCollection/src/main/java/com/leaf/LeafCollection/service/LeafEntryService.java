@@ -43,7 +43,8 @@ public class LeafEntryService {
     public LeafEntry findById(Long id){
         return leafEntryRepository.findById(id).orElseThrow(() -> new RuntimeException("LeafEntry not found"));
     }
-    public List<LeafReportDTO> getLeafReport(LocalDate date, String branchCode) {
-        return leafEntryRepository.getLeafReport(date, branchCode);
+    
+    public List<LeafReportDTO> getLeafReport(LocalDate startDate, LocalDate endDate, String branchCode) {
+        return leafEntryRepository.getLeafReport(startDate, endDate, branchCode);
     }
 }

@@ -71,6 +71,7 @@ public class PaymentService {
                 "Advance Payment"
         );
     }
+
     @Transactional
     public void updatePayment(Long paymentId,
                               BigDecimal newAmount,
@@ -84,7 +85,7 @@ public class PaymentService {
         }
 
         Party party = oldPayment.getParty();
-       // Branch branch = oldPayment.getBranch();
+        // Branch branch = oldPayment.getBranch();
 
         // 1. Reverse old payment in ledger
         ledgerService.createEntry(
@@ -104,7 +105,7 @@ public class PaymentService {
         // 3. Create new payment
         Payment newPayment = new Payment();
         newPayment.setParty(party);
-       // newPayment.setBranch(branch);
+        // newPayment.setBranch(branch);
         newPayment.setPaymentDate(oldPayment.getPaymentDate());
         newPayment.setAmount(newAmount);
         newPayment.setRemarks("Edited: " + remarks);
@@ -122,11 +123,41 @@ public class PaymentService {
                 "Updated payment"
         );
     }
+
     public List<Payment> getTodayPayments() {
         return paymentRepository.findTodayPayments(LocalDate.now());
     }
 
     public BigDecimal getTodayTotal() {
         return paymentRepository.getTodayTotal(LocalDate.now());
+    }
+
+    public Payment findById(Long id) {
+        return paymentRepository.findById(id).orElseThrow(() -> new RuntimeException("Payment not found"));
+    }
+
+    @Transactional
+    public void updatePayment(Payment updatedPayment) {
+        Payment existing = findById(updatedPayment.getId());
+        existing.setParty(updatedPayment.getParty());
+        existing.setPaymentDate(updatedPayment.getPaymentDate());
+        existing.setAmount(updatedPayment.getAmount());
+        existing.setPaymentMode(updatedPayment.getPaymentMode());
+        existing.setRemarks(updatedPayment.getRemarks());
+        paymentRepository.save(existing);
+    }
+
+    @Transactional
+    public void deletePayment(Long id) {
+        Payment payment = findById(id);
+        paymentRepository.delete(payment);
+    }
+
+    public List<Payment> getPayments(LocalDate startDate, LocalDate endDate, Long branchId) {
+        return paymentRepository.findPaymentsByDateRangeAndBranch(startDate, endDate, branchId);
+    }
+
+    public BigDecimal getTotalPayments(LocalDate startDate, LocalDate endDate, Long branchId) {
+        return paymentRepository.getTotalByDateRangeAndBranch(startDate, endDate, branchId);
     }
 }

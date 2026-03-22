@@ -40,7 +40,7 @@
                 <div class="box col-md-12">
                     <div class="box-inner">
                         <div class="box-header well" data-original-title="">
-                            <h2><i class="glyphicon glyphicon-edit"></i> Leaf Collection</h2>
+                            <h2><i class="glyphicon glyphicon-edit"></i> <span th:text="${isEditMode ? 'Edit Leaf Entry' : 'Add New Leaf Entry'}"></span></h2>
 
                             <div class="box-icon">
                             </div>
@@ -48,36 +48,53 @@
                         <div class="box-content">
                             <form th:action="@{/leaf-entry/save}" th:object="${leafEntry}" method="post">
                                 <input type="hidden" th:field="*{id}" />
+
                                 <div class="form-group">
-                                    <label for="entryDate">Entry Date</label>
-                                    <input type="date" th:field="*{entryDate}" name="entryDate" placeholder="Enter Date"
+                                    <label for="entryDate">
+                                        <strong>Entry Date</strong>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="date" th:value="${leafEntry.entryDate}" name="entryDate"
+                                           class="form-control" placeholder="Enter Date"
                                            id="entryDate" required>
                                 </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="party">Select Party</label>
 
-                                    <div class="controls">
-                                        <select id="party" name="party" data-rel="chosen" th:field="*{party}">
-                                            <option value="">-- Select Party --</option>
-                                            <option th:each="p : ${parties}"
-                                                    th:value="${p.id}"
-                                                    th:text="${p.partyCode + ' - ' + p.name}">
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="quantity">Quantity (Kg)</label>
-                                        <input type="number" step="0.01" name="quantity" th:field="*{quantity}" placeholder="Enter Weight"
-                                               id="quantity">
-                                    </div>
+                                <div class="form-group">
+                                    <label for="party">
+                                        <strong>Select Party</strong>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <select id="party" name="party" class="form-control" data-rel="chosen" th:field="*{party}" required style="width: 400px;">
+                                        <option value="">-- Select Party --</option>
+                                        <option th:each="p : ${parties}"
+                                                th:value="${p.id}"
+                                                th:text="${p.partyCode + ' - ' + p.name}"
+                                                th:selected="${leafEntry.party != null && leafEntry.party.id == p.id}">
+                                        </option>
+                                    </select>
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="quantity">
+                                        <strong>Quantity (Kg)</strong>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="number" step="0.01" name="quantity" th:field="*{quantity}"
+                                           class="form-control" placeholder="Enter Weight in Kg"
+                                           id="quantity" required min="0">
+                                </div>
+
+                                <div class="form-actions" style="margin-top: 20px;">
+                                    <button type="submit" class="btn btn-success"
+                                            th:text="${isEditMode ? 'Update Entry' : 'Save Entry'}">
+                                    </button>
+                                    <a th:if="${isEditMode}" href="/leaf-entry" class="btn btn-secondary"
+                                       style="margin-left: 10px;">Cancel</a>
+                                    <a th:if="!${isEditMode}" href="/leaf-entry" class="btn btn-secondary"
+                                       style="margin-left: 10px;">Clear</a>
+                                </div>
+                            </form>
                         </div>
-
-                        <button type="submit" class="btn btn-default" th:text="${isEditMode ? 'Update' : 'Save'}"></button>
-                        <a th:if="${isEditMode}" href="/leaf-entry" class="btn btn-secondary">Cancel</a>
-                        </form>
-
-                    </div>
                 </div>
             </div>
             <!--/span-->

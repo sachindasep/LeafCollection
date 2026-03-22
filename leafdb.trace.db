@@ -1032,3 +1032,278 @@ Caused by: org.h2.jdbc.JdbcSQLInvalidAuthorizationSpecException: Wrong user name
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:522)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 96 more
+2026-03-22 09:16:43.296976+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 09:16:43.306596+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 03:48:52.430513Z database: flush
+org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The file is locked: D:/Project palakkal/Code/LeafCollection/leafdb.mv.db [2.3.232/7]" [50000-232]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:407)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:1546)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:371)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:291)
+	at org.h2.mvstore.MVStore$Builder.open(MVStore.java:2035)
+	at org.h2.mvstore.db.Store.<init>(Store.java:133)
+	at org.h2.engine.Database.<init>(Database.java:326)
+	at org.h2.engine.Engine.openSession(Engine.java:92)
+	at org.h2.engine.Engine.openSession(Engine.java:222)
+	at org.h2.engine.Engine.createSession(Engine.java:201)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:344)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:124)
+	at org.h2.Driver.connect(Driver.java:59)
+	at com.intellij.database.remote.jdbc.helpers.JdbcHelperImpl.connect(JdbcHelperImpl.java:786)
+	at com.intellij.database.remote.jdbc.impl.RemoteDriverImpl.connect(RemoteDriverImpl.java:47)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.rmi/sun.rmi.server.UnicastServerRef.dispatch(UnicastServerRef.java:360)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:200)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:197)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:714)
+	at java.rmi/sun.rmi.transport.Transport.serviceCall(Transport.java:196)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport.handleMessages(TCPTransport.java:598)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(TCPTransport.java:844)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.lambda$run$0(TCPTransport.java:721)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(TCPTransport.java:720)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: The file is locked: D:/Project palakkal/Code/LeafCollection/leafdb.mv.db [2.3.232/7]" [50000-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 32 more
+Caused by: org.h2.mvstore.MVStoreException: The file is locked: D:/Project palakkal/Code/LeafCollection/leafdb.mv.db [2.3.232/7]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	at org.h2.mvstore.SingleFileStore.lockFileChannel(SingleFileStore.java:143)
+	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:117)
+	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:81)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:286)
+	... 26 more
+2026-03-22 09:25:33.289231+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 09:25:33.292196+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 09:32:39.405757+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 09:32:39.408757+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 09:36:06.191883+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 09:36:06.196055+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 09:40:47.955648+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 09:40:47.958650+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 09:43:29.362627+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 09:43:29.365609+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 09:48:59.765654+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 09:48:59.769743+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 09:56:32.031549+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 09:56:32.035551+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 10:05:07.110590+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 10:05:07.113584+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 10:11:09.135544+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 10:11:09.141545+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 10:12:51.943332+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 10:12:51.946315+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 10:16:57.590081+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 10:16:57.593099+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 10:18:52.936345+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 10:18:52.939343+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 10:32:43.304142+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 10:32:43.307125+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 10:47:30.865764+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 10:47:30.870766+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 10:51:25.897265+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 10:51:25.900279+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 10:51:58.568370+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 10:51:58.570373+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 10:53:48.841226+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 10:53:48.843227+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 10:57:17.753058+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 10:57:17.756065+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 11:01:08.371650+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 11:01:08.374635+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 11:04:37.097515+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 11:04:37.100514+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 11:08:07.223979+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 11:08:07.227982+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]
+2026-03-22 11:09:02.486398+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists monthly_account \000d\000a       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists monthly_account 
+       add constraint UK1n8jfsedyrcuhsgvxfpypxcc0 unique (party_id, branch_id, month) [42001-240]
+2026-03-22 11:09:02.490397+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    alter table if exists rate \000d\000a       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, [*]month)"; expected "identifier"; SQL statement:
+
+    alter table if exists rate 
+       add constraint UKsxrmok0sfjm2e9g05yi6w6wwn unique (branch_id, month) [42001-240]

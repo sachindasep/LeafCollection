@@ -40,72 +40,72 @@
                 <div class="box col-md-12">
                     <div class="box-inner">
                         <div class="box-header well" data-original-title="">
-                            <h2><i class="glyphicon glyphicon-edit"></i> Leaf Collection</h2>
+                            <h2><i class="glyphicon glyphicon-edit"></i> Party Payments</h2>
 
                             <div class="box-icon">
                             </div>
                         </div>
                         <div class="box-content">
-                            <form th:action="@{/payments/save}" method="post">
-                                <!-- <input type="hidden" th:field="*{id}" />-->
+                            <form th:action="@{/payments/save}" th:object="${payment}" method="post">
+                                <input type="hidden" th:field="*{id}" />
                                 <div class="form-group">
-                                    <label for="paymentDate">Entry Date</label>
-                                    <input type="date" name="paymentDate" placeholder="Enter Date"
+                                    <label for="paymentDate">
+                                        <strong>Entry Date</strong>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="date" th:field="*{paymentDate}" class="form-control" placeholder="Enter Date"
                                            id="paymentDate" required>
                                 </div>
-                            <!--    <div class="control-group">
-                                    <label class="control-label" for="branchId">Select Branch</label>
 
-                                    <div class="controls">
-                                        <select id="branchId" name="branchId" data-rel="chosen">
-                                            <option value="">&#45;&#45; Select Branch &#45;&#45;</option>
-                                            <option th:each="b : ${branches}"
-                                                    th:value="${b.id}"
-                                                    th:text="${b.name}">
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>-->
-                                <div class="control-group">
-                                    <label class="control-label" for="partyId">Select Party</label>
-
-                                    <div class="controls">
-                                        <select id="partyId" name="partyId" data-rel="chosen">
-                                            <option value="">-- Select Party --</option>
-                                            <option th:each="p : ${parties}"
-                                                    th:value="${p.id}"
-                                                    th:text="${p.partyCode + ' - ' + p.name}">
-                                            </option>
-                                        </select>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="party">
+                                        <strong>Select Party</strong>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <select id="party" name="party" class="form-control" data-rel="chosen" th:field="*{party}" required style="width: 400px;">
+                                        <option value="">-- Select Party --</option>
+                                        <option th:each="p : ${parties}"
+                                                th:value="${p.id}"
+                                                th:text="${p.partyCode + ' - ' + p.name}"
+                                                th:selected="${payment.party != null && payment.party.id == p.id}">
+                                        </option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="quantity">Amount</label>
-                                    <input type="number" step="0.01" name="amount"
+                                    <label for="amount">
+                                        <strong>Amount</strong>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="number" step="0.01" name="amount" th:field="*{amount}" class="form-control"
                                            placeholder="Enter Amount"
-                                           id="quantity" required>
+                                           id="amount" required>
                                 </div>
 
-                                <div class="control-group">
-                                    <label class="control-label" for="paymentMode">Mode:</label>
-
-                                    <div class="controls">
-                                        <select id="paymentMode" name="paymentMode" data-rel="chosen">
-                                            <option value="CASH">Cash</option>
-                                            <option value="UPI">UPI</option>
-                                            <option value="BANK_TRANSFER">Bank</option>
-                                        </select>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="paymentMode">
+                                        <strong>Mode</strong>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <select id="paymentMode" name="paymentMode" class="form-control" data-rel="chosen" th:field="*{paymentMode}" required>
+                                        <option value="CASH">Cash</option>
+                                        <option value="UPI">UPI</option>
+                                        <option value="BANK_TRANSFER">Bank</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="remarks">Remarks</label>
-                                    <input type="text" name="remarks"
+                                    <label for="remarks">
+                                        <strong>Remarks</strong>
+                                    </label>
+                                    <input type="text" name="remarks" th:field="*{remarks}" class="form-control"
                                            placeholder="Enter remarks"
                                            id="remarks">
                                 </div>
 
 
-                                <button type="submit" class="btn btn-default">Save Payment</button>
+                                <button type="submit" class="btn btn-default" th:text="${isEditMode ? 'Update Payment' : 'Save Payment'}">
+                                </button>
+                                <a th:if="${isEditMode}" th:with="branchParam=${selectedBranchId != null ? '&branchId=' + selectedBranchId : ''}" th:href="@{'/payments?startDate=' + ${startDate} + '&endDate=' + ${endDate} + ${branchParam}}" class="btn btn-secondary"
+                                   style="margin-left: 10px;">Cancel</a>
 
                             </form>
                         </div>
@@ -118,7 +118,7 @@
                 <div class="box col-md-12">
                     <div class="box-inner">
                         <div class="box-header well" data-original-title="">
-                            <h2><i class="glyphicon glyphicon-user"></i> Today's Payment</h2>
+                            <h2><i class="glyphicon glyphicon-user"></i> Payments</h2>
 
                             <div class="box-icon">
                                 <a href="#" class="btn btn-minimize btn-round btn-default"><i
@@ -126,13 +126,40 @@
                             </div>
                         </div>
                         <div class="box-content">
+                            <!-- Filter Form -->
+                            <form method="get" action="/payments" class="form-inline" style="margin-bottom: 20px;">
+                                <div class="form-group">
+                                    <label for="startDate">From Date:</label>
+                                    <input type="date" id="startDate" name="startDate" class="form-control"
+                                           th:value="${startDate}" required>
+                                </div>
+                                <div class="form-group" style="margin-left: 10px;">
+                                    <label for="endDate">To Date:</label>
+                                    <input type="date" id="endDate" name="endDate" class="form-control"
+                                           th:value="${endDate}" required>
+                                </div>
+                                <div class="form-group" style="margin-left: 10px;">
+                                    <label for="branchId">Branch:</label>
+                                    <select id="branchId" name="branchId" class="form-control">
+                                        <option value="">All Branches</option>
+                                        <option th:each="b : ${branches}"
+                                                th:value="${b.id}"
+                                                th:text="${b.name}"
+                                                th:selected="${selectedBranchId == b.id}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Filter</button>
+                            </form>
+
                             <div class="alert alert-info">
-                                <strong>Today's Total Payment: </strong>
-                                <span th:text="${todayTotal != null ? todayTotal + ' RS' : '0 RS'}"></span>
+                                <strong>Total Payments: </strong>
+                                <span th:text="${total != null ? total + ' RS' : '0 RS'}"></span>
                             </div>
                             <table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
                                 <thead>
                                 <tr>
+                                    <th>Payment Date</th>
                                     <th>Party</th>
                                     <th>Branch</th>
                                     <th>Amount</th>
@@ -141,21 +168,37 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="today : ${todayPayments}">
-                                    <td th:text="${today.party.name}"></td>
-                                    <td th:text="${today.party.branch.name}"></td>
-                                    <td th:text="${today.amount}"></td>
-                                    <td th:text="${today.paymentMode}"></td>
+                                <tr th:each="payment : ${payments}" th:with="branchParam=${selectedBranchId != null ? '&branchId=' + selectedBranchId : ''}">
+                                    <td th:text="${payment.paymentDate}"></td>
+                                    <td th:text="${payment.party.name}"></td>
+                                    <td th:text="${payment.party.branch.name}"></td>
+                                    <td th:text="${payment.amount}"></td>
+                                    <td th:switch="${payment.paymentMode != null ? payment.paymentMode.name() : ''}">
+                                        <span th:case="'CASH'">Cash</span>
+                                        <span th:case="'UPI'">UPI</span>
+                                        <span th:case="'BANK_TRANSFER'">Bank</span>
+                                        <span th:case="*">Unknown</span>
+                                    </td>
                                     <td class="center">
-
-                                        <a class="btn btn-info" th:href="@{'/payments/edit/' + ${today.id}}">
+                                        <a th:href="@{'/payments/edit/' + ${payment.id} + '?startDate=' + ${startDate} + '&endDate=' + ${endDate} + ${branchParam}}" class="btn btn-info">
                                             <i class="glyphicon glyphicon-edit icon-white"></i>
                                             Edit
                                         </a>
-
+                                        <a th:href="@{'/payments/delete/' + ${payment.id} + '?startDate=' + ${startDate} + '&endDate=' + ${endDate} + ${branchParam}}"
+                                           onclick="return confirm('Are you sure you want to delete this payment?')">
+                                            <i class="glyphicon glyphicon-trash icon-white"></i>
+                                            Delete
+                                        </a>
                                     </td>
                                 </tr>
                                 </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="3" style="text-align: right;"><strong>Total:</strong></td>
+                                    <td><strong th:text="${total != null ? total + ' RS' : '0 RS'}"></strong></td>
+                                    <td colspan="2"></td>
+                                </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>

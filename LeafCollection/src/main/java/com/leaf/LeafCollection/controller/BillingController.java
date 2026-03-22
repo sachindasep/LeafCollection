@@ -43,13 +43,14 @@ public class BillingController {
         YearMonth ym = YearMonth.parse(month);
 
         service.generateMonthlyBill(branchId, ym);
-        generateUiData(branchId, ym,model);
+        generateUiData(branchId, ym, model);
 
         model.addAttribute("accounts",
                 repo.findByBranchIdAndMonth(branchId, ym));
 
         model.addAttribute("selectedBranch", branchId);
         model.addAttribute("selectedMonth", month);
+        model.addAttribute("selectedBranchName", branchRepo.findById(branchId).map(b -> b.getName()).orElse(""));
         model.addAttribute("branches", branchRepo.findAll());
 
         return "billing";

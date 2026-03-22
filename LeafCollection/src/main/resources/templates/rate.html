@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -54,12 +53,14 @@
                             </div>
                         </div>
                         <div class="box-content">
-                            <form th:action="@{/rate/load}" method="get">
-                                <div class="control-group">
-                                    <label class="control-label" for="branchId">Select Branch</label>
-
-                                    <div class="controls">
-                                        <select id="branchId" name="branchId" data-rel="chosen" required>
+                            <form th:action="@{/rate/load}" method="get" class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="branchId" class="col-sm-2 control-label">
+                                        <strong>Select Branch</strong>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-4">
+                                        <select id="branchId" name="branchId" class="form-control" data-rel="chosen" required>
                                             <option value="">-- Select Branch --</option>
                                             <option th:each="b : ${branches}"
                                                     th:value="${b.id}"
@@ -70,11 +71,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="month">Month</label>
-                                    <input type="month" name="month" id="month" required>
+                                    <label for="month" class="col-sm-2 control-label">
+                                        <strong>Month</strong>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-4">
+                                        <input type="month" name="month" id="month" class="form-control" th:value="${selectedMonth}" required>
+                                    </div>
                                 </div>
-
-                                <button type="submit" class="btn btn-default">Load</button>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-4">
+                                        <button type="submit" class="btn btn-primary">Load</button>
+                                    </div>
+                                </div>
                             </form>
 
                         </div>
@@ -86,6 +95,10 @@
                         <div class="box-inner">
                             <div class="box-header well" data-original-title="">
                                 <h2><i class="glyphicon glyphicon-edit"></i> Enter Rate</h2>
+                                <p th:if="${selectedBranchName != null and selectedMonth != null}">
+                                    <strong>Branch:</strong> <span th:text="${selectedBranchName}"></span> |
+                                    <strong>Month:</strong> <span th:text="${selectedMonth}"></span>
+                                </p>
 
                                 <div class="box-icon">
                                     <a href="#" class="btn btn-setting btn-round btn-default"><i
@@ -97,17 +110,29 @@
                                 </div>
                             </div>
                             <div class="box-content">
-                                <form th:action="@{/rate/save}" method="post">
+                                <div th:if="${param.success != null}" class="alert alert-success">
+                                    <strong>Success!</strong> Rate saved/updated successfully.
+                                </div>
+                                <form th:action="@{/rate/save}" method="post" class="form-horizontal">
                                     <input type="hidden" name="branchId" th:value="${selectedBranch}"/>
                                     <input type="hidden" name="month" th:value="${selectedMonth}"/>
 
                                     <div class="form-group">
-                                        <label for="rate">Rate</label>
-                                        <input type="number" step="0.01" name="rate"
-                                               th:value="${existingRate}" required/>
+                                        <label for="rate" class="col-sm-2 control-label">
+                                            <strong>Rate</strong>
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-4">
+                                            <input type="number" step="0.01" name="rate" id="rate"
+                                                   th:value="${existingRate}" class="form-control" required/>
+                                        </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-default">Save / Update Rate</button>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-4">
+                                            <button type="submit" class="btn btn-primary">Save / Update Rate</button>
+                                        </div>
+                                    </div>
                                 </form>
 
                             </div>

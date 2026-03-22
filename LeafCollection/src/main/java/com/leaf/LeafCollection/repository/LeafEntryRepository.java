@@ -34,6 +34,7 @@ public interface LeafEntryRepository extends JpaRepository<LeafEntry, Long> {
     @Query("""
                 SELECT new com.leaf.LeafCollection.dto.LeafReportDTO(
                     l.id,
+                    l.entryDate,
                     b.name,
                     p.partyCode,
                     p.name,
@@ -44,11 +45,34 @@ public interface LeafEntryRepository extends JpaRepository<LeafEntry, Long> {
                 JOIN p.branch b
                 WHERE l.entryDate = :date
                   AND (:branchCode IS NULL OR b.branchCode = :branchCode)
-                GROUP BY b.branchCode, p.partyCode, p.name, l.id
+                GROUP BY b.branchCode, p.partyCode, p.name, l.id, l.entryDate
                 ORDER BY p.partyCode
             """)
     List<LeafReportDTO> getLeafReport(
             @Param("date") LocalDate date,
+            @Param("branchCode") String branchCode
+    );
+
+    @Query("""
+                SELECT new com.leaf.LeafCollection.dto.LeafReportDTO(
+                    l.id,
+                    l.entryDate,
+                    b.name,
+                    p.partyCode,
+                    p.name,
+                    SUM(l.quantity)
+                )
+                FROM LeafEntry l
+                JOIN l.party p
+                JOIN p.branch b
+                WHERE l.entryDate BETWEEN :startDate AND :endDate
+                  AND (:branchCode IS NULL OR b.branchCode = :branchCode)
+                GROUP BY b.branchCode, p.partyCode, p.name, l.id, l.entryDate
+                ORDER BY p.partyCode
+            """)
+    List<LeafReportDTO> getLeafReport(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
             @Param("branchCode") String branchCode
     );
     @Query("""

@@ -43,4 +43,25 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
       AND p.status = 'ACTIVE'
 """)
     BigDecimal getTotalPayment(Long partyId, LocalDate startDate, LocalDate endDate);
+    @Query("""
+    SELECT p FROM Payment p
+    JOIN p.party party
+    JOIN party.branch b
+    WHERE p.paymentDate BETWEEN :startDate AND :endDate
+      AND (:branchId IS NULL OR b.id = :branchId)
+      AND p.status = 'ACTIVE'
+    ORDER BY p.paymentDate DESC, p.id DESC
+""")
+    List<Payment> findPaymentsByDateRangeAndBranch(LocalDate startDate, LocalDate endDate, Long branchId);
+
+    @Query("""
+    SELECT COALESCE(SUM(p.amount), 0)
+    FROM Payment p
+    JOIN p.party party
+    JOIN party.branch b
+    WHERE p.paymentDate BETWEEN :startDate AND :endDate
+      AND (:branchId IS NULL OR b.id = :branchId)
+      AND p.status = 'ACTIVE'
+""")
+    BigDecimal getTotalByDateRangeAndBranch(LocalDate startDate, LocalDate endDate, Long branchId);
 }
