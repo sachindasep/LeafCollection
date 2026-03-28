@@ -18,7 +18,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Data
@@ -45,23 +48,28 @@ public class MonthlyAccountService {
     @Transactional
     public void generateMonthlyBill(Long branchId, YearMonth month) {
 
-        // ❗ Check finalized
-        if (monthlyRepo.isFinalized(branchId, month)) {
-           // throw new RuntimeException("Already finalized. Cannot regenerate."); //TODO
-            return;
-        }
+        // 1. Delete existing DRAFT bills
+        monthlyRepo.deleteDrafts(branchId, month);
 
-        // 🧹 Delete old (regenerate)
-        monthlyRepo.deleteByBranchIdAndMonth(branchId, month);
+        // 2. Get partyIds which already have FINAL or PAID bills
+        List<String> existingPartyIds =
+                monthlyRepo.findPartyIdsNotInDraft(branchId, month);
 
+        // ✅ Convert to Set for fast lookup
+        Set<String> existingPartySet = new HashSet<>(existingPartyIds);
+
+        // 3. Get all parties
         List<Party> parties = partyRepo.findByBranchId(branchId);
 
-        String monthStr = month.toString(); // "2026-03"
-        //TODO move to Util
         LocalDate startDate = month.atDay(1);
         LocalDate endDate = month.atEndOfMonth();
+
         for (Party party : parties) {
 
+            // ❗ Skip if already FINAL or PAID
+            if (existingPartySet.contains(party.getPartyCode())) {
+                continue;   // ✅ NOT return
+            }
             // 1. Quantity
             BigDecimal qty = leafRepo.getTotalQuantity(
                     party.getId(), startDate,endDate);
@@ -107,10 +115,18 @@ public class MonthlyAccountService {
     public BigDecimal getOpeningBalance(Long partyId, YearMonth month) {
 
         YearMonth prev = month.minusMonths(1);
+        Optional<MonthlyAccount> lastMonth = monthlyRepo.findByPartyIdAndMonth(partyId, prev);
 
-        return monthlyRepo.findByPartyIdAndMonth(partyId, prev)
+        BigDecimal netBalance =lastMonth
                 .map(MonthlyAccount::getNetBalance)
                 .orElse(BigDecimal.ZERO);
+        BigDecimal actualPaid =lastMonth
+                .map(MonthlyAccount::getActualPaid)
+                .orElse(BigDecimal.ZERO);
+
+        BigDecimal nextOpening = netBalance.subtract(actualPaid);
+        return nextOpening;
+
     }
 
     @Transactional

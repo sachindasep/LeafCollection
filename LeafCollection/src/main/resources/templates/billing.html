@@ -111,19 +111,42 @@
                                     <th style="text-align: right;">Amount</th>
                                     <th style="text-align: right;">Payment</th>
                                     <th style="text-align: right;">Net Balance</th>
+                                    <th style="text-align: right;">Paid</th>
                                     <th style="text-align: center;">Status</th>
+                                    <th style="text-align: center;">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="a : ${accounts}">
-                                    <td th:text="${a.party.name}"></td>
+                                    <td th:text="${a.partyName}"></td>
                                     <td style="text-align: right;" th:text="${a.openingBalance}"></td>
                                     <td style="text-align: right;" th:text="${a.totalQuantity}"></td>
                                     <td style="text-align: right;" th:text="${a.rate}"></td>
                                     <td style="text-align: right;" th:text="${a.totalAmount}"></td>
                                     <td style="text-align: right;" th:text="${a.totalPayment}"></td>
                                     <td style="text-align: right;" th:text="${a.netBalance}"></td>
+                                    <td style="text-align: right;" th:text="${a.actualPaid}"></td>
                                     <td style="text-align: center;" th:text="${a.status}"></td>
+                                    <td style="text-align: center;">
+                                        <button type="button"
+                                                class="btn btn-primary btn-sm"
+                                                th:attr="onclick=|printIndividualBill('${a.partyName}',
+                                                  '${a.partyCode}',
+                                                  '${selectedMonth}',
+                                                  '${a.openingBalance}',
+                                                  '${a.totalQuantity}',
+                                                  '${a.rate}',
+                                                  '${a.totalAmount}',
+                                                  '${a.totalPayment}',
+                                                  '${a.netBalance}')|">
+                                            <i class="glyphicon glyphicon-print"></i> Print
+                                        </button>
+                                        <button class="btn btn-success btn-sm"
+                                                th:if="${a.status == 'FINAL'}"
+                                                th:attr="onclick=|openSettlementPopup(${a.id}, '${a.netBalance}')|">
+                                            Settle
+                                        </button>
+                                    </td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
@@ -148,7 +171,13 @@
                                     <i class="glyphicon glyphicon-ok"></i> Finalize
                                 </button>
                                 <button type="button" class="btn btn-info" style="margin-left: 10px;" onclick="printBillingTable()">
-                                    <i class="glyphicon glyphicon-print"></i> Print
+                                    <i class="glyphicon glyphicon-print"></i> Monthly Print
+                                </button>
+                                <button type="button"
+                                        class="btn btn-warning"
+                                        style="margin-left: 10px;"
+                                        onclick="bulkPrintBills()">
+                                    <i class="glyphicon glyphicon-print"></i> Bulk Print
                                 </button>
                             </form>
                         </div>
@@ -158,21 +187,21 @@
         </div><!--/row-->
         <hr>
 
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true">
-
+        <div class="modal fade" id="settleModal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">×</button>
-                        <h3>Next release Feature</h3>
+                        <h4>Settle Bill</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Stay Tuned Will be available in next release</p>
+                        <input type="hidden" id="accountId"/>
+
+                        <label>Amount Paid</label>
+                        <input type="number" id="paidAmount" class="form-control"/>
                     </div>
                     <div class="modal-footer">
-                        <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
-                        <a href="#" class="btn btn-primary" data-dismiss="modal">Save changes</a>
+                        <button class="btn btn-primary" onclick="submitSettlement()">OK</button>
+                        <button class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -185,7 +214,48 @@
     <!-- external javascript -->
     <div th:replace="fragments/scripts :: scripts"></div>
 
+
+    <script th:inline="javascript">
+        const accountsData = /*[[${accounts}]]*/ [];
+        const selectedMonth = /*[[${selectedMonth}]]*/ '';
+    </script>
+
     <script>
+        function openSettlementPopup(id, netBalance) {
+            document.getElementById("accountId").value = id;
+            document.getElementById("paidAmount").value = netBalance;
+
+            $('#settleModal').modal('show');
+        }
+
+        function submitSettlement() {
+
+            const id = document.getElementById("accountId").value;
+            const amount = document.getElementById("paidAmount").value;
+
+            fetch('/billing/settle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: id, amount: amount })
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error("Failed to settle");
+                    }
+                   // return res.text(); // ✅ safer
+                })
+                .then(() => {
+                    alert("Settlement Done!");
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Settlement failed!");
+                });
+        }
+
         function printBillingTable() {
             // Safely get values
             const branchEl = document.querySelector('h2 span:nth-child(2)');
@@ -199,8 +269,19 @@
                 alert("Table not found!");
                 return;
             }
+            const clonedTable = tableEl.cloneNode(true);
 
-            const table = tableEl.outerHTML;
+
+// Remove last 2 columns
+            clonedTable.querySelectorAll("tr").forEach(row => {
+                if (row.cells.length >= 2) {
+                    row.deleteCell(-1); // remove last column
+                    row.deleteCell(-1); // remove second last column
+                }
+            });
+
+
+            const table = clonedTable.outerHTML;
 
             const printWindow = window.open('', '_blank', 'width=900,height=700');
 
@@ -208,7 +289,7 @@
             printWindow.document.write(`
         <html>
         <head>
-            <title>Billing Report</title>
+            <title>Monthly Billing Report</title>
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -257,6 +338,146 @@
             printWindow.document.close();
 
             // Wait for content to load before printing
+            printWindow.onload = function () {
+                printWindow.focus();
+                printWindow.print();
+                printWindow.close();
+            };
+        }
+        function printIndividualBill(name, code, month, opening, qty, rate, amount, payment, closing) {
+
+            function format(val) {
+                return parseFloat(val || 0).toFixed(2);
+            }
+
+            const printWindow = window.open('', '_blank', 'width=400,height=600');
+
+            printWindow.document.write(`
+    <html>
+    <head>
+        <title>Individual Bill</title>
+        <style>
+            body {
+                font-family: monospace;
+                font-size: 14px;
+                padding: 10px;
+            }
+            pre {
+                line-height: 1.4;
+            }
+        </style>
+    </head>
+    <body>
+<pre>
+          PALAKKAL AGENCIES
+              VELLACHAL
+ Mob : 9495258812        Shop : 04936 262736
+                         Resi :       262436
+ -------------------------------------------
+ Name  : ${name}
+ Code  : ${code}
+ Month : ${formatMonth(month)}
+ -------------------------------------------
+ Opening Balance                 ${format(opening)}
+ Nt. Wt.   Rate     Amount          Payment
+ -------------------------------------------
+ ${format(qty).padStart(8)}   ${format(rate).padStart(6)}   ${format(amount).padStart(8)}   ${format(payment).padStart(8)}
+ ===========================================
+ Closing Balance                ${format(closing)}
+ ===========================================
+</pre>
+    </body>
+    </html>
+    `);
+
+            printWindow.document.close();
+
+            printWindow.onload = function () {
+                printWindow.print();
+                printWindow.close();
+            };
+        }
+        function formatMonth(monthStr) {
+            const date = new Date(monthStr + "-01");
+            return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+        }
+
+        /// bulk  logic**************************
+
+        function bulkPrintBills() {
+
+            function format(val) {
+                return parseFloat(val || 0).toFixed(2);
+            }
+
+            function formatMonth(monthStr) {
+                const date = new Date(monthStr + "-01");
+                return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+            }
+
+            let content = "";
+            const finalBills = accountsData.filter(a => a.status === 'FINAL');
+
+            if (finalBills.length === 0) {
+                alert("No FINAL bills available!");
+                return;
+            }
+
+            finalBills.forEach(a => {
+
+                content += `
+<pre>
+          PALAKKAL AGENCIES
+              VELLACHAL
+ Mob : 9495258812        Shop : 04936 262736
+                         Resi :       262436
+ -------------------------------------------
+ Name  : ${a.partyName}
+ Code  : ${a.partyCode}
+ Month : ${formatMonth(selectedMonth)}
+ -------------------------------------------
+ Opening Balance                 ${format(a.openingBalance)}
+ Nt. Wt.   Rate     Amount          Payment
+ -------------------------------------------
+ ${format(a.totalQuantity).padStart(8)}   ${format(a.rate).padStart(6)}   ${format(a.totalAmount).padStart(8)}   ${format(a.totalPayment).padStart(8)}
+ ===========================================
+ Closing Balance                ${format(a.netBalance)}
+ ===========================================
+</pre>
+
+<br><br>
+        `;
+            });
+
+            const printWindow = window.open('', '_blank', 'width=800,height=700');
+
+            printWindow.document.write(`
+        <html>
+        <head>
+            <title>Bulk Bills</title>
+            <style>
+                body {
+                    font-family: monospace;
+                    font-size: 14px;
+                }
+                pre {
+                    margin: 0;
+                }
+                @media print {
+                    div {
+                        page-break-after: always;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            ${content}
+        </body>
+        </html>
+    `);
+
+            printWindow.document.close();
+
             printWindow.onload = function () {
                 printWindow.focus();
                 printWindow.print();

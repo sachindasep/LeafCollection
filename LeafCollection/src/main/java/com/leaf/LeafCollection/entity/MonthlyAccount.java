@@ -68,4 +68,7 @@ public class MonthlyAccount {
     // Optional audit
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    private BigDecimal actualPaid;   // amount entered during settlement
+    private LocalDateTime settledAt;
 }

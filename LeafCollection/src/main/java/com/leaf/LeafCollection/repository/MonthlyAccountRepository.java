@@ -2,6 +2,7 @@ package com.leaf.LeafCollection.repository;
 
 import com.leaf.LeafCollection.entity.MonthlyAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.YearMonth;
@@ -25,4 +26,10 @@ public interface MonthlyAccountRepository extends JpaRepository<MonthlyAccount, 
       AND m.status = 'FINAL'
 """)
     boolean isFinalized(Long branchId, YearMonth month);
+    @Modifying
+    @Query("DELETE FROM MonthlyAccount m WHERE m.branch.id = :branchId AND m.month = :month AND m.status = 'DRAFT'")
+    void deleteDrafts(Long branchId, YearMonth month);
+
+    @Query("SELECT DISTINCT m.party.partyCode FROM MonthlyAccount m WHERE m.branch.id = :branchId AND m.month = :month AND m.status != 'DRAFT' ")
+    List<String> findPartyIdsNotInDraft(Long branchId, YearMonth month);
 }

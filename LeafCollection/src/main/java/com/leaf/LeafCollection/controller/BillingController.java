@@ -1,33 +1,32 @@
 package com.leaf.LeafCollection.controller;
 
+import com.leaf.LeafCollection.dto.AccountPrintDto;
+import com.leaf.LeafCollection.dto.SettlementRequest;
+import com.leaf.LeafCollection.entity.MonthlyAccount;
 import com.leaf.LeafCollection.repository.BranchRepository;
 import com.leaf.LeafCollection.repository.MonthlyAccountRepository;
+import com.leaf.LeafCollection.service.BillingService;
 import com.leaf.LeafCollection.service.MonthlyAccountService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.YearMonth;
+import java.util.List;
 
 @Controller
 @RequestMapping("/billing")
+@AllArgsConstructor
 public class BillingController {
 
     private final MonthlyAccountService service;
     private final MonthlyAccountRepository repo;
     private final BranchRepository branchRepo;
+    private final BillingService billingService;
 
-    public BillingController(MonthlyAccountService service,
-                             MonthlyAccountRepository repo,
-                             BranchRepository branchRepo) {
-        this.service = service;
-        this.repo = repo;
-        this.branchRepo = branchRepo;
-    }
 
     @GetMapping
     public String billingPage(Model model) {
@@ -46,7 +45,7 @@ public class BillingController {
         generateUiData(branchId, ym, model);
 
         model.addAttribute("accounts",
-                repo.findByBranchIdAndMonth(branchId, ym));
+                billingService.getAccountsByBranchAndMonth(branchId,ym));
 
         model.addAttribute("selectedBranch", branchId);
         model.addAttribute("selectedMonth", month);
@@ -91,5 +90,26 @@ public class BillingController {
         service.finalizeMonth(branchId, YearMonth.parse(month));
 
         return "redirect:/billing";
+    }
+    @GetMapping("/account/print")
+    public String printAccounts(
+            @RequestParam Long branchId,
+            @RequestParam String month,
+            Model model) {
+
+        YearMonth ym = YearMonth.parse(month);
+
+
+
+        model.addAttribute("accounts", billingService.getAccountsByBranchAndMonth(branchId,ym));
+        model.addAttribute("branches",  branchRepo.findAll());
+
+        return "account-print";
+    }
+    @PostMapping("/settle")
+    @ResponseBody
+    public ResponseEntity<?> settle(@RequestBody SettlementRequest req) {
+        billingService.settle(req.getId(), req.getAmount());
+        return ResponseEntity.ok().build();
     }
 }
